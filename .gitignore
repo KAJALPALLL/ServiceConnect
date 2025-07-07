@@ -1,0 +1,16 @@
+#Environments
+.venv
+.env
+venv/
+env/
+
+.idea
+.idea/
+
+remove_migrations.py
+**/migrations/*
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
+**/migrations/
+media/

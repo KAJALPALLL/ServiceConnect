@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+
+<div class="card p-4 m-4" style="width:800px;">
+    <h2 class="text-center m-4 ">Conversation</h2>
+{% if appointment_data %}
+{% for data in appointment_data %}
+{% if data.business_man %}
+
+<p>{{data.business_man.first_name}} : {{data.description}}</p>
+{% elif data.customer %}
+<p>{{data.customer.first_name}} : {{data.description}}</p>
+{% endif %}
+
+{% endfor %}
+{% else %}
+<p>Test</p>
+{% endif %}
+
+<form method="post" action="{% url 'add_conversation' id %}">
+    {% csrf_token %}
+    <label for="description"></label>
+    <input id="description" type="textarea" name="description">
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</div>
+{% endblock %}

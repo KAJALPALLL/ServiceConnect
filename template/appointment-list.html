@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% block content %}
+
+          <div class="content-wrapper">
+            <div class="row">
+              <div class="col-lg-12 stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Appointment List</h4>
+<!--                    <p class="card-description"> Add class <code>.table-{color}</code>-->
+                    </p>
+                    <div class="table-responsive">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr class="table-success">
+                            <th>Business Man Name</th>
+                            <th>Customer </th>
+                            <th> Profession </th>
+                            <th> Time </th>
+                            <th>Address</th>
+                            <th>Status</th>
+                            <th>Appointment Status</th>
+                            <th>Review</th>
+                            <th>Conversation</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for data in data %}
+                          <tr >
+                            <td>{{data.business_man.first_name}}</td>
+                            <td>{{data.customer.first_name}}</td>
+                            <td>{{data.business_man.profession}}</td>
+                            <td>{{data.datetime}}</td>
+                            <td>{{data.business_man.address}}</td>
+                            {% if request.user.groups.first.name == 'business_man' %}
+                            <td>
+                             
+                              <form method="post" action="{% url 'update_status' data.id %}">
+                                {% csrf_token %}
+                                <select name="status" onchange="this.form.submit()">
+                                  {% if data.status == 'approved' %}
+                                  <option value="approved" class="text-success" selected>Approved</option>
+                                  <option value="deny" class="text-danger">Deny</option>
+                                  {% else %}
+                                  <option value="approved" class="text-success">Approved</option>
+                                  <option value="deny" class="text-danger" selected>Deny</option>
+                                  {% endif %}
+                                </select>
+                              </form>
+
+                            </td>
+                            <td>{{data.appointment_status}}</td>
+                            
+                            {% elif request.user.groups.first.name == 'customer' %}
+                            <td>{{data.status}}</td>
+                            <td>
+                            <form method="post" action="{% url 'appointment_status_update' data.id %}">
+                              {% csrf_token %}
+                              <select name="status" onchange="this.form.submit()">
+                                {% if data.status == 'completed' %}
+                                <option value="completed" class="text-success" selected>Completed</option>
+                                <option value="pending" class="text-danger">Pending</option>
+                                {% else %}
+                                <option value="completed" class="text-success">Completed</option>
+                                <option value="pending" class="text-danger" selected>Pending</option>
+                                {% endif %}
+                              </select>
+                            </form>
+                          </td>
+                            {% else %}
+                            <td>
+                              <form method="post" action="{% url 'update_status' data.id %}">
+                                {% csrf_token %}
+                                <select name="status" onchange="this.form.submit()">
+                                  {% if data.status == 'approved' %}
+                                  <option value="approved" class="text-success" selected>Approved</option>
+                                  <option value="deny" class="text-danger">Deny</option>
+                                  {% else %}
+                                  <option value="approved" class="text-success">Approved</option>
+                                  <option value="deny" class="text-danger" selected>Deny</option>
+                                  {% endif %}
+                                </select>
+                              </form>
+                            </td>
+
+
+                            <td><form method="post" action="{% url 'appointment_status_update' data.id %}">
+                              {% csrf_token %}
+                              <select name="status" onchange="this.form.submit()">
+                                {% if data.status == 'completed' %}
+                                <option value="completed" class="text-success" selected>Completed</option>
+                                <option value="pending" class="text-danger">Pending</option>
+                                {% else %}
+                                <option value="completed" class="text-success">Completed</option>
+                                <option value="pending" class="text-danger" selected>Pending</option>
+                                {% endif %}
+                              </select>
+                            </form></td>
+                            {% endif %}
+                            <td>
+                              <a href="{% url 'add_review' data.id %}">
+                                <button class="btn btn-success">Add Review</button>
+                              </a>  
+                            </td>
+                            <td>
+                              <a href="{% url 'add_conversation' data.id %}">
+                              <button class="btn btn-warning">Start</button></a>
+                            </td>
+
+
+
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+{% endblock %}
